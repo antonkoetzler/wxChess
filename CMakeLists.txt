@@ -1,0 +1,34 @@
+PROJECT(MyoroPlayer)
+
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+IF (WIN32)
+  SET(wxWidgets_ROOT_DIR "C:/wxWidgets-3.1.5")
+  SET(wxWidgets_CONFIGURATION mswu)
+ENDIF (WIN32)
+
+FIND_PACKAGE(wxWidgets REQUIRED core base)
+
+AUX_SOURCE_DIRECTORY(./src/ SRC)
+INCLUDE_DIRECTORIES(./include/)
+
+INCLUDE("${wxWidgets_USE_FILE}")
+
+ADD_EXECUTABLE(${PROJECT_NAME} ${SRC})
+
+IF (UNIX)
+  TARGET_LINK_LIBRARIES(
+    ${PROJECT_NAME}
+    ${wxWidgets_LIBRARIES}
+    "-no-pie"
+  )
+ENDIF (UNIX)
+
+IF (WIN32)
+  TARGET_LINK_LIBRARIES(
+    ${PROJECT_NAME}
+    ${wxWidgets_LIBRARIES}
+    "-static -mwindows"
+  )
+ENDIF (WIN32)
+
