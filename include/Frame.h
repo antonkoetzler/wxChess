@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include "MenuBar.h"
+#include "Taskbar.h"
 
 class Frame : public wxFrame
 {
@@ -18,7 +19,9 @@ class Frame : public wxFrame
  private:
   DECLARE_EVENT_TABLE();
   MenuBar* menubar;
-  wxGridSizer* board;
+  wxBoxSizer* sizer;
+    Taskbar* taskbar;
+    wxGridSizer* board;
   wxVector<wxPanel*> tiles;
 };
 

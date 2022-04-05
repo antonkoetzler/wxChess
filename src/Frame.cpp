@@ -4,7 +4,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
   EVT_MENU(wxID_EXIT, Frame::exit)
 END_EVENT_TABLE()
 
-Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize(1200, 1000))
+Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxDefaultSize)
 {
   menubar = new MenuBar();
   SetMenuBar(menubar);
@@ -27,9 +27,13 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize
       else            tiles[i - 1]->SetBackgroundColour(wxColour(255, 239, 213));
     }
 
-    board->Add(tiles[i - 1], 0);
+    board->Add(tiles[i - 1], 0, wxSHAPED);
   }
-  SetSizerAndFit(board);
+
+  sizer = new wxBoxSizer(wxVERTICAL);
+  sizer->Add(new Taskbar(this), 0, wxEXPAND);
+  sizer->Add(board, 1, wxSHAPED | wxALIGN_CENTER_HORIZONTAL);
+  SetSizerAndFit(sizer);
 
   Centre();
 }
