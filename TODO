@@ -1,3 +1,2 @@
-1. Redo the interface
-  1. Do a menu of gamemodes on program start
-  2. Only draw the chess board when the program is in a match
+1. Go into a chess board when the buttons are clicked
+2. Make a chess board + pieces taken UI
