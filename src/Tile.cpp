@@ -27,7 +27,11 @@ void Tile::addPiece(wxString colourArg, wxString pieceArg)
   }
 
   if (image.IsOk())
+  {
     piece = new Piece(this, image, colourArg);
-  piece->Centre();
+    sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(piece, 1, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL | wxSHAPED);
+    SetSizer(sizer);
+  }
 }
 

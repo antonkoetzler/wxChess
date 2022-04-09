@@ -13,6 +13,7 @@ class Tile : public wxPanel
   void addPiece(wxString, wxString);
 
  private:
+  wxBoxSizer* sizer = nullptr; // Keeps piece centered
   Piece* piece = nullptr;
 };
 

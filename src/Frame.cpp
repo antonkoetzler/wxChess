@@ -13,7 +13,6 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize
   startMenu = new StartMenu(this);
 
   Centre();
-  SetBackgroundColour(wxColour(32, 32, 32));
 }
 
 Frame::~Frame() { Destroy(); }
@@ -24,24 +23,14 @@ void Frame::launchOneOne(wxCommandEvent& evt)
 {
   delete startMenu; startMenu = nullptr;
 
-  wxPanel* panel1 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 50));
-  panel1->SetBackgroundColour(wxColour(255, 182, 193));
-  wxPanel* panel2 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(200, 50));
-  panel2->SetBackgroundColour(wxColour(255, 182, 193));
+  wxPanel* panel1 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
+  panel1->SetBackgroundColour(wxColour(32, 32, 32));
+  wxPanel* panel2 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
+  panel2->SetBackgroundColour(wxColour(32, 32, 32));
 
   gameInfo = new wxBoxSizer(wxHORIZONTAL);
-  gameInfo->Add(
-    panel1,
-    0,
-    wxRIGHT,
-    5
-  );
-  gameInfo->Add(
-    panel2,
-    0,
-    wxLEFT,
-    5
-  );
+  gameInfo->Add(panel1, 0, wxRIGHT, 5);
+  gameInfo->Add(panel2, 0, wxLEFT, 5);
 
   initBoard();
 
@@ -61,6 +50,7 @@ void Frame::launchOneOne(wxCommandEvent& evt)
   SetSizerAndFit(sizer);
   Centre();
   SetBackgroundColour(wxColour(112, 128, 144));
+  Refresh(); // This makes sure there are no visual bugs
 }
 
 void Frame::initBoard()
