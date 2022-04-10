@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <vector>
 #include "MenuBar.h"
 #include "StartMenu.h"
 #include "Tile.h"
@@ -17,7 +18,6 @@ class Frame : public wxFrame
 
   // Helper functions
   void initBoard();
-  bool inRange(int, int, int); // Checks if int is in range of other ints
 
  private:
   DECLARE_EVENT_TABLE();
@@ -28,6 +28,6 @@ class Frame : public wxFrame
     wxBoxSizer* gameInfo;
     wxGridSizer* board;
 
-  wxVector<Tile*> tiles;
+  std::vector<std::vector<Tile*>> tiles = {{}, {}, {}, {}, {}, {}, {}, {}};
 };
 

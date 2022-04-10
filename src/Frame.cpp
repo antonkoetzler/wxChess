@@ -58,43 +58,38 @@ void Frame::initBoard()
   board = new wxGridSizer(8, 8, 0, 0);
 
   // Placing tiles into board
-  for (int i = 1; i < 65; i++)
+  for (int i = 0; i < 8; i++) // Column for loop
   {
-    tiles.push_back(new Tile(this));
-    if (inRange(i, 1, 8) || inRange(i, 17, 24) || inRange(i, 33, 40) || inRange(i, 49, 56))
+    for (int o = 0; o < 8; o++) // Row for loop
     {
-      if (i % 2 == 0) tiles[i - 1]->SetBackgroundColour(wxColour(48, 48, 48));
-      else            tiles[i - 1]->SetBackgroundColour(wxColour(255, 239, 213));
+      tiles[i].push_back(new Tile(this));
+      if (i % 2 == 0 && o % 2 == 0)      tiles[i][o]->SetBackgroundColour(wxColour(255, 255, 255));
+      else if (i % 2 == 0 && o % 2 != 0) tiles[i][o]->SetBackgroundColour(wxColour(240, 234, 214));
+      else if (i % 2 != 0 && o % 2 == 0) tiles[i][o]->SetBackgroundColour(wxColour(240, 234, 214));
+      else if (i % 2 != 0 && o % 2 != 0) tiles[i][o]->SetBackgroundColour(wxColour(255, 255, 255));
+      board->Add(tiles[i][o], 0, wxSHAPED);
     }
-    else
-    {
-      if (i % 2 == 0) tiles[i - 1]->SetBackgroundColour(wxColour(255, 239, 213));
-      else            tiles[i - 1]->SetBackgroundColour(wxColour(48, 48, 48));
-    }
-    board->Add(tiles[i - 1], 0, wxSHAPED);
   }
 
+  // Setting the pieces
   wxImage::AddHandler(new wxPNGHandler);
-  // Placing pieces onto the tiles
-  tiles[0]->addPiece("Black", "Rook");
-  tiles[1]->addPiece("Black", "Knight");
-  tiles[2]->addPiece("Black", "Bishop");
-  tiles[3]->addPiece("Black", "Queen");
-  tiles[4]->addPiece("Black", "King");
-  tiles[5]->addPiece("Black", "Bishop");
-  tiles[6]->addPiece("Black", "Knight");
-  tiles[7]->addPiece("Black", "Rook");
-  for (int i = 8; i < 16; i++) tiles[i]->addPiece("Black", "Pawn");
-  for (int i = 48; i < 56; i++) tiles[i]->addPiece("White", "Pawn");
-  tiles[56]->addPiece("White", "Rook");
-  tiles[57]->addPiece("White", "Knight");
-  tiles[58]->addPiece("White", "Bishop");
-  tiles[59]->addPiece("White", "Queen");
-  tiles[60]->addPiece("White", "King");
-  tiles[61]->addPiece("White", "Bishop");
-  tiles[62]->addPiece("White", "Knight");
-  tiles[63]->addPiece("White", "Rook");
+  tiles[0][0]->addPiece("Black", "Rook");
+  tiles[0][1]->addPiece("Black", "Knight");
+  tiles[0][2]->addPiece("Black", "Bishop");
+  tiles[0][3]->addPiece("Black", "Queen");
+  tiles[0][4]->addPiece("Black", "King");
+  tiles[0][5]->addPiece("Black", "Bishop");
+  tiles[0][6]->addPiece("Black", "Knight");
+  tiles[0][7]->addPiece("Black", "Rook");
+  for (int i = 0; i < 8; i++) tiles[1][i]->addPiece("Black", "Pawn");
+  for (int i = 0; i < 8; i++) tiles[6][i]->addPiece("White", "Pawn");
+  tiles[7][0]->addPiece("White", "Rook");
+  tiles[7][1]->addPiece("White", "Knight");
+  tiles[7][2]->addPiece("White", "Bishop");
+  tiles[7][3]->addPiece("White", "Queen");
+  tiles[7][4]->addPiece("White", "King");
+  tiles[7][5]->addPiece("White", "Bishop");
+  tiles[7][6]->addPiece("White", "Knight");
+  tiles[7][7]->addPiece("White", "Rook");
 }
-
-bool Frame::inRange(int n, int x, int y) { return (x <= n && n <= y); }
 
