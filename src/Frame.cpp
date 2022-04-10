@@ -85,15 +85,15 @@ void Frame::initBoard()
   tiles[6]->addPiece("Black", "Knight");
   tiles[7]->addPiece("Black", "Rook");
   for (int i = 8; i < 16; i++) tiles[i]->addPiece("Black", "Pawn");
-  tiles[48]->addPiece("White", "Rook");
-  tiles[49]->addPiece("White", "Knight");
-  tiles[50]->addPiece("White", "Bishop");
-  tiles[51]->addPiece("White", "Queen");
-  tiles[52]->addPiece("White", "King");
-  tiles[53]->addPiece("White", "Bishop");
-  tiles[54]->addPiece("White", "Knight");
-  tiles[55]->addPiece("White", "Rook");
-  for (int i = 56; i < 64; i++) tiles[i]->addPiece("White", "Pawn");
+  for (int i = 48; i < 56; i++) tiles[i]->addPiece("White", "Pawn");
+  tiles[56]->addPiece("White", "Rook");
+  tiles[57]->addPiece("White", "Knight");
+  tiles[58]->addPiece("White", "Bishop");
+  tiles[59]->addPiece("White", "Queen");
+  tiles[60]->addPiece("White", "King");
+  tiles[61]->addPiece("White", "Bishop");
+  tiles[62]->addPiece("White", "Knight");
+  tiles[63]->addPiece("White", "Rook");
 }
 
 bool Frame::inRange(int n, int x, int y) { return (x <= n && n <= y); }

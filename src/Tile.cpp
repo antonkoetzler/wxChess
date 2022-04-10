@@ -28,10 +28,24 @@ void Tile::addPiece(wxString colourArg, wxString pieceArg)
 
   if (image.IsOk())
   {
-    piece = new Piece(this, image, colourArg);
+    piece = new Piece(this, image, colourArg, pieceArg);
     sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(piece, 1, wxALIGN_CENTRE_HORIZONTAL | wxALIGN_CENTRE_VERTICAL | wxSHAPED);
+    sizer->Add(piece, 1, wxSHAPED | wxALIGN_CENTRE);
     SetSizer(sizer);
+  }
+}
+
+Piece* Tile::getPiece() { return piece; }
+
+void Tile::movePiece()
+{
+  if (sizer != nullptr && piece != nullptr)
+  {
+    // Remove piece from sizer without deleting piece
+    sizer->Clear(false);
+    delete sizer; sizer = nullptr;
+    // Move Piece*
+    piece->Move(10, 10);
   }
 }
 

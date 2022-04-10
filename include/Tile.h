@@ -11,9 +11,11 @@ class Tile : public wxPanel
   Tile(wxFrame*);
 
   void addPiece(wxString, wxString);
+  Piece* getPiece();
+  void movePiece(); // Disconnects the sizer to move Piece*
 
  private:
-  wxBoxSizer* sizer = nullptr; // Keeps piece centered
+  wxBoxSizer* sizer = nullptr; // Keeps Piece* centered
   Piece* piece = nullptr;
 };
 
