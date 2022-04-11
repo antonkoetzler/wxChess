@@ -15,6 +15,7 @@ class Frame : public wxFrame
   // Event functions
   void exit(wxCommandEvent&);
   void launchOneOne(wxCommandEvent&);
+  void leftDown(wxMouseEvent&);
 
   // Helper functions
   void initBoard();
@@ -29,5 +30,6 @@ class Frame : public wxFrame
     wxGridSizer* board;
 
   std::vector<std::vector<Tile*>> tiles = {{}, {}, {}, {}, {}, {}, {}, {}};
+  wxString turn = "White"; // Controls the turn
 };
 
