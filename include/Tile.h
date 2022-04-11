@@ -10,7 +10,7 @@ class Tile : public wxPanel
  public:
   Tile(wxFrame*);
 
-  void addPiece(wxString, wxString);
+  void addPiece(wxString, wxString = "");
   Piece* getPiece();
   void movePiece(); // Disconnects the sizer to move Piece*
 

@@ -1,2 +1,6 @@
 1. Make Piece functionality
-2. Make scoreboard
+2. Make scoreboard for: (and make scoreboard it's own class)
+  1. Frame::launchOneOne
+  2. Frame::launchOneMinute
+  3. Frame::launchFiveFive
+3. Finish Frame::showMenu

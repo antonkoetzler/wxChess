@@ -1,8 +1,11 @@
 #include "Frame.h"
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
+  EVT_MENU(MENU, Frame::showMenu)
   EVT_MENU(wxID_EXIT, Frame::exit)
   EVT_BUTTON(ONE_ONE, Frame::launchOneOne)
+  EVT_BUTTON(ONE_MINUTE, Frame::launchOneMinute)
+  EVT_BUTTON(FIVE_FIVE, Frame::launchFiveFive)
 END_EVENT_TABLE()
 
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize(300, 200))
@@ -17,15 +20,27 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize
 
 Frame::~Frame() { Destroy(); }
 
+void Frame::showMenu(wxCommandEvent& evt)
+{
+  if (sizer != nullptr)
+  {
+    // Clears objects and deletes all objects
+    sizer->Clear(true);
+    delete sizer; sizer = nullptr;
+    startMenu = new StartMenu(this);
+    Refresh();
+  }
+}
+
 void Frame::exit(wxCommandEvent& evt) { Close(); }
 
-void Frame::launchOneOne(wxCommandEvent& evt)
+void Frame::launch()
 {
   delete startMenu; startMenu = nullptr;
 
-  wxPanel* panel1 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
+  panel1 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
   panel1->SetBackgroundColour(wxColour(32, 32, 32));
-  wxPanel* panel2 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
+  panel2 = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(310, 50));
   panel2->SetBackgroundColour(wxColour(32, 32, 32));
 
   gameInfo = new wxBoxSizer(wxHORIZONTAL);
@@ -52,6 +67,10 @@ void Frame::launchOneOne(wxCommandEvent& evt)
   SetBackgroundColour(wxColour(112, 128, 144));
   Refresh(); // This makes sure there are no visual bugs
 }
+
+void Frame::launchOneOne(wxCommandEvent& evt) { launch(); }
+void Frame::launchOneMinute(wxCommandEvent& evt) { launch(); }
+void Frame::launchFiveFive(wxCommandEvent& evt) { launch(); }
 
 void Frame::leftDown(wxMouseEvent& evt)
 {
@@ -82,7 +101,17 @@ void Frame::leftDown(wxMouseEvent& evt)
   {
     if (clickedPiecePiece == "Pawn")
     {
-      std::cout << "Pawn" << std::endl;
+      // Checking if one column up is open
+      if (tiles[tileI - 1][tileO]->getPiece() == nullptr)
+      {
+        tiles[tileI - 1][tileO]->addPiece("Open");
+
+        // Checking if two columns up is open (if the pawn is in it's starting column)
+        if (tiles[tileI - 2][tileO]->getPiece() == nullptr && tileI == 6)
+          tiles[tileI - 2][tileO]->addPiece("Open");
+      }
+      else
+        std::cout << "Unempty tile" << std::endl;
     } else if (clickedPiecePiece == "Knight")
     {
       std::cout << "White Knight" << std::endl;
@@ -201,5 +230,7 @@ void Frame::initBoard()
 
   tiles[7][7]->addPiece("White", "Rook");
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+
+  tiles[5][0]->addPiece("Black", "Pawn");
 }
 

@@ -13,11 +13,15 @@ class Frame : public wxFrame
   ~Frame();
 
   // Event functions
+  void showMenu(wxCommandEvent&);
   void exit(wxCommandEvent&);
   void launchOneOne(wxCommandEvent&);
+  void launchOneMinute(wxCommandEvent&);
+  void launchFiveFive(wxCommandEvent&);
   void leftDown(wxMouseEvent&);
 
   // Helper functions
+  void launch(); // Creates: Scoreboard, chessboard, etc
   void initBoard();
 
  private:
@@ -27,6 +31,8 @@ class Frame : public wxFrame
   StartMenu* startMenu;
   wxBoxSizer* sizer;
     wxBoxSizer* gameInfo;
+      wxPanel* panel1;
+      wxPanel* panel2;
     wxGridSizer* board;
 
   std::vector<std::vector<Tile*>> tiles = {{}, {}, {}, {}, {}, {}, {}, {}};

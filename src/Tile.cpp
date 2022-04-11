@@ -26,6 +26,9 @@ void Tile::addPiece(wxString colourArg, wxString pieceArg)
     else if (pieceArg == "King") image.LoadFile("../img/blackKing.png", wxBITMAP_TYPE_PNG);
   }
 
+  // Adds a circle around a tile, indicating an open tile
+  if (colourArg == "Open") image.LoadFile("../img/openTile.png");
+
   if (image.IsOk())
   {
     piece = new Piece(this, image, colourArg, pieceArg);
