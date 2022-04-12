@@ -46,12 +46,13 @@ void Frame::launch()
   panel2->SetBackgroundColour(wxColour(32, 32, 32));
 
   gameInfo = new wxBoxSizer(wxHORIZONTAL);
-  gameInfo->Add(panel1, 0, wxRIGHT, 5);
-  gameInfo->Add(panel2, 0, wxLEFT, 5);
+  gameInfo->Add(panel1, 1, wxLEFT | wxRIGHT, 5);
+  gameInfo->Add(panel2, 1, wxLEFT | wxRIGHT, 5);
 
   initBoard();
 
   sizer = new wxBoxSizer(wxVERTICAL);
+  sizer->AddStretchSpacer();
   sizer->Add(
     gameInfo,
     0,
@@ -60,9 +61,10 @@ void Frame::launch()
   );
   sizer->Add(
     board,
-    1,
-    wxSHAPED | wxALIGN_CENTRE_HORIZONTAL
+    0,
+    wxALIGN_CENTRE
   );
+  sizer->AddStretchSpacer();
 
   SetSizerAndFit(sizer);
   Centre();
