@@ -10,6 +10,8 @@ END_EVENT_TABLE()
 
 Frame::Frame() : wxFrame(nullptr, wxID_ANY, "wxChess", wxDefaultPosition, wxSize(300, 200))
 {
+  wxImage::AddHandler(new wxPNGHandler);
+
   menubar = new MenuBar();
   SetMenuBar(menubar);
 
@@ -97,21 +99,26 @@ void Frame::leftDown(wxMouseEvent& evt)
   // Piece assertion & rules
   wxString clickedPiecePiece = clickedPiece->getPiece();   // Piece name
   wxString clickedPieceColour = clickedPiece->getColour(); // Piece colour
+  clearCaptureIcons();
   if (turn == "White" && clickedPieceColour == turn)
   {
     if (clickedPiecePiece == "Pawn")
     {
-      // Checking if one column up is open
+      // Checking if there is a piece one column up
       if (tiles[tileI - 1][tileO]->getPiece() == nullptr)
       {
-        tiles[tileI - 1][tileO]->addPiece("Open");
-
-        // Checking if two columns up is open (if the pawn is in it's starting column)
-        if (tiles[tileI - 2][tileO]->getPiece() == nullptr && tileI == 6)
-          tiles[tileI - 2][tileO]->addPiece("Open");
+        tiles[tileI - 1][tileO]->addMove("Tile");
+        // Checking if there is a piece two columns up
+        if (tiles[tileI - 2][tileO]->getPiece() == nullptr)
+          tiles[tileI - 2][tileO]->addMove("Tile");
       }
-      else
-        std::cout << "Unempty tile" << std::endl;
+      // Checking if there are pieces on the pawn's diagonals
+      if (tileO > 0 && tileI < 7) // Left diagonal
+        if (tiles[tileI - 1][tileO - 1]->getPiece() != nullptr)
+          tiles[tileI - 1][tileO - 1]->addMove(tiles[tileI - 1][tileO - 1]->getPiece()->getPiece(), "Black");
+      if (tileO < 7 && tileI < 7) // Right diagonal
+        if (tiles[tileI - 1][tileO + 1]->getPiece() != nullptr)
+          tiles[tileI - 1][tileO + 1]->addMove(tiles[tileI - 1][tileO + 1]->getPiece()->getPiece(), "Black");
     } else if (clickedPiecePiece == "Knight")
     {
       std::cout << "White Knight" << std::endl;
@@ -171,7 +178,6 @@ void Frame::initBoard()
   }
 
   // Setting the pieces
-  wxImage::AddHandler(new wxPNGHandler);
   tiles[0][0]->addPiece("Black", "Rook");
   tiles[0][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this); // Binds left click to a function that
                                                                           // handles movement in Frame class
@@ -232,5 +238,31 @@ void Frame::initBoard()
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
   tiles[5][0]->addPiece("Black", "Pawn");
+  tiles[5][2]->addPiece("Black", "Pawn");
+}
+
+void Frame::clearCaptureIcons()
+{
+  wxString pieces[7] = {"Tile", "Pawn", "Knight", "Bishop", "Rook", "Queen", "King"};
+  for (int i = 0; i < 8; i++)
+  {
+    for (int o = 0; o < 8; o++)
+    {
+      if (tiles[i][o]->getPiece() != nullptr)
+      {
+        if (tiles[i][o]->getPiece()->getIsCaptureIcon())
+        {
+          for (int p = 0; p < 7; p++)
+          {
+            if (tiles[i][o]->getPiece()->getPiece() == pieces[p])
+            {
+              tiles[i][o]->resetTile();
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 

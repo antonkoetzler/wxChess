@@ -10,9 +10,11 @@ class Tile : public wxPanel
  public:
   Tile(wxFrame*);
 
-  void addPiece(wxString, wxString = "");
+  void addPiece(wxString, wxString);
+  void addMove(wxString, wxString = ""); // Shows where piece can move
   Piece* getPiece();
   void movePiece(); // Disconnects the sizer to move Piece*
+  void resetTile(); // Removes capture icon and reverts Tile
 
  private:
   wxBoxSizer* sizer = nullptr; // Keeps Piece* centered

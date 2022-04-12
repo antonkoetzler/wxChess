@@ -1,0 +1,3 @@
+C:/Users/flqn/git/wxChess/build/CMakeFiles/wxChess.dir
+C:/Users/flqn/git/wxChess/build/CMakeFiles/edit_cache.dir
+C:/Users/flqn/git/wxChess/build/CMakeFiles/rebuild_cache.dir

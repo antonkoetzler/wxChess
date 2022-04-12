@@ -23,6 +23,7 @@ class Frame : public wxFrame
   // Helper functions
   void launch(); // Creates: Scoreboard, chessboard, etc
   void initBoard();
+  void clearCaptureIcons(); // Clears possible moves on clicked Piece*
 
  private:
   DECLARE_EVENT_TABLE();
