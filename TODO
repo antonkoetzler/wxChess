@@ -1,9 +1,0 @@
-1. Make Piece functionality
-  1. Finish pawn
-    1. Make it move
-    2. Make taking moves a thing
-2. Make scoreboard for: (and make scoreboard it's own class)
-  1. Frame::launchOneOne
-  2. Frame::launchOneMinute
-  3. Frame::launchFiveFive
-3. Finish Frame::showMenu
