@@ -6,6 +6,7 @@
 #include "StartMenu.h"
 #include "Tile.h"
 #include "Scoreboard.h"
+#include "Piece.h"
 
 class Frame : public wxFrame
 {
@@ -18,11 +19,14 @@ class Frame : public wxFrame
   void launchOneZero(wxCommandEvent&);
   void launchOneOne(wxCommandEvent&);
   void launchFiveFive(wxCommandEvent&);
+  void leftDown(wxMouseEvent&); // Piece* movement
 
   // Helper functions
   void initBoard();
   void initGameUi(); // Creates Scoreboard* and chess board
                      // Used with Frame::launch*
+  void clearCaptureIcons(); // Cleans board of possible move indicators
+
 
  private:
   DECLARE_EVENT_TABLE();
@@ -34,5 +38,6 @@ class Frame : public wxFrame
     wxGridSizer* board;
 
   std::vector<std::vector<Tile*>> tiles = {{}, {}, {}, {}, {}, {}, {}, {}};
+  wxString turn = "White";
 };
 
