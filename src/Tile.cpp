@@ -46,7 +46,7 @@ void Tile::addCapture(wxString colourArg, wxString pieceArg)
 {
   wxBitmap image;
 
-  if (colourArg == "Open")         image.LoadFile("./img/openTile.png");
+  if (colourArg == "Open")         image.LoadFile("./img/openTile.png", wxBITMAP_TYPE_PNG);
   else if (colourArg == "White")
   {
     if (pieceArg == "Pawn")        image.LoadFile("./img/whitePawnCapture.png", wxBITMAP_TYPE_PNG);
