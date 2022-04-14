@@ -11,6 +11,7 @@ class Tile : public wxPanel
   void addPiece(wxString, wxString);
   void addCapture(wxString, wxString = "");
   void resetTile();
+  void removePiece();
 
   Piece* getPiece();
 

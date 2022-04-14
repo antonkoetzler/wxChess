@@ -97,5 +97,12 @@ void Tile::resetTile()
   else Refresh();
 }
 
+void Tile::removePiece()
+{
+  sizer->Clear(true);
+  piece = nullptr;
+  Refresh();
+}
+
 Piece* Tile::getPiece() { return piece; }
 

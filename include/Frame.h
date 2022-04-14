@@ -39,5 +39,6 @@ class Frame : public wxFrame
 
   std::vector<std::vector<Tile*>> tiles = {{}, {}, {}, {}, {}, {}, {}, {}};
   wxString turn = "White";
+  Piece* clickedPiece = nullptr;
 };
 

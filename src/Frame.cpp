@@ -30,8 +30,14 @@ void Frame::launchFiveFive(wxCommandEvent& evt) { initGameUi(); }
 
 void Frame::leftDown(wxMouseEvent& evt)
 {
-  clearCaptureIcons();
-  Piece* clickedPiece = wxDynamicCast(evt.GetEventObject(), Piece);
+  // If we have clicked a capture piece
+  Piece* clickedPieceTemp = wxDynamicCast(evt.GetEventObject(), Piece);
+
+  if (!clickedPieceTemp->getIsCapture())
+  {
+    clickedPiece = clickedPieceTemp; // Storing the piece if it makes a move
+    clearCaptureIcons();
+  }
 
   // Getting the coordinates of clickedPiece within tiles
   int tileI, tileO;
@@ -40,7 +46,7 @@ void Frame::leftDown(wxMouseEvent& evt)
   {
     for (int o = 0; o < 8; o++)
     {
-      if (clickedPiece == tiles[i][o]->getPiece())
+      if (clickedPieceTemp == tiles[i][o]->getPiece())
       {
         tileI = i; tileO = o;
         found = true;
@@ -51,8 +57,8 @@ void Frame::leftDown(wxMouseEvent& evt)
   }
 
   // Piece ruling
-  wxString pieceName = clickedPiece->getPiece();
-  wxString pieceColour = clickedPiece->getColour();
+  wxString pieceName = clickedPieceTemp->getPiece();
+  wxString pieceColour = clickedPieceTemp->getColour();
   if (turn == "White" && pieceColour == "White")
   {
     if (pieceName == "Pawn")
@@ -61,17 +67,37 @@ void Frame::leftDown(wxMouseEvent& evt)
       if (tiles[tileI - 1][tileO]->getPiece() == nullptr)
       {
         tiles[tileI - 1][tileO]->addCapture("Open");
+        tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
         // Checking if there is a piece two columns up
         if (tiles[tileI - 2][tileO]->getPiece() == nullptr)
+        {
           tiles[tileI - 2][tileO]->addCapture("Open");
+          tiles[tileI - 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
       }
-      // Checking left diagonal for a piece
-      if (tileO > 0 && tiles[tileI - 1][tileO - 1]->getPiece() != nullptr && tiles[tileI - 1][tileO - 1]->getPiece()->getColour() == "Black")
+      // Checking left
+      if (tileO > 0)
+      {
+        // Checking left diagonal for a piece
+        if (tiles[tileI - 1][tileO - 1]->getPiece() != nullptr && tiles[tileI - 1][tileO - 1]->getPiece()->getColour() == "Black")
+        {
           tiles[tileI - 1][tileO - 1]->addCapture("Black", tiles[tileI - 1][tileO - 1]->getPiece()->getPiece());
-      // Checking right diagonal for a piece
-      if (tileO < 7 && tiles[tileI - 1][tileO + 1]->getPiece() != nullptr && tiles[tileI - 1][tileO + 1]->getPiece()->getColour() == "Black")
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        // En passant left
+      }
+      // Checking right
+      if (tileO < 7)
+      {
+        // Checking right diagonal for a piece
+        if (tiles[tileI - 1][tileO + 1]->getPiece() != nullptr && tiles[tileI - 1][tileO + 1]->getPiece()->getColour() == "Black")
+        {
           tiles[tileI - 1][tileO + 1]->addCapture("Black", tiles[tileI - 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        // En passant right
+      }
     }
     else if (pieceName == "Knight")
     {
@@ -98,7 +124,41 @@ void Frame::leftDown(wxMouseEvent& evt)
   {
     if (pieceName == "Pawn")
     {
-      std::cout << "Black Pawn" << std::endl;
+      // Checking if there is a piece one column down
+      if (tiles[tileI + 1][tileO]->getPiece() == nullptr)
+      {
+        tiles[tileI + 1][tileO]->addCapture("Open");
+        tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+
+        // Checking if there is a piece two columns down
+        if (tiles[tileI + 2][tileO]->getPiece() == nullptr)
+        {
+          tiles[tileI + 2][tileO]->addCapture("Open");
+          tiles[tileI + 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // Checking left
+      if (tileO > 0)
+      {
+        // Checking left diagonal for a piece
+        if (tiles[tileI + 1][tileO - 1]->getPiece() != nullptr && tiles[tileI + 1][tileO - 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("White", tiles[tileI + 1][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        // En passant left
+      }
+      // Checking right
+      if (tileO < 7)
+      {
+        // Checking right diagonal for a piece
+        if (tiles[tileI + 1][tileO + 1]->getPiece() != nullptr && tiles[tileI + 1][tileO + 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("White", tiles[tileI + 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        // En passant right
+      }
     }
     else if (pieceName == "Knight")
     {
@@ -119,6 +179,32 @@ void Frame::leftDown(wxMouseEvent& evt)
     else if (pieceName == "King")
     {
       std::cout << "Black King" << std::endl;
+    }
+  }
+  else if (clickedPieceTemp->getIsCapture())
+  {
+    // Moving archived clickedPiece to clicked object
+    tiles[tileI][tileO]->addPiece(clickedPiece->getColour(), clickedPiece->getPiece());
+    tiles[tileI][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+
+    // Getting where the piece 'was' and removing it
+    int moveI, moveO;
+    for (int i = 0; i < 8; i++)
+    {
+      for (int o = 0; o < 8; o++)
+      {
+        if (clickedPiece == tiles[i][o]->getPiece())
+        {
+          moveI = i; moveO = o;
+          tiles[i][o]->removePiece();
+          clearCaptureIcons();
+
+          if (turn == "White") turn = "Black";
+          else                 turn = "White";
+
+          break;
+        }
+      }
     }
   }
 }
@@ -204,8 +290,16 @@ void Frame::initBoard()
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
   // ***TEST PIECES***
-  tiles[5][0]->addPiece("Black", "Pawn");
+  tiles[5][0]->addPiece("Black", "Queen");
+  tiles[5][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[4][0]->addPiece("Black", "Pawn");
+  tiles[4][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[5][2]->addPiece("Black", "Pawn");
+  tiles[5][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[2][0]->addPiece("White", "Bishop");
+  tiles[2][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[3][2]->addPiece("White", "Pawn");
+  tiles[3][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 }
 
 void Frame::clearCaptureIcons()

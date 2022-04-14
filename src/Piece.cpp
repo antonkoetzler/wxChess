@@ -17,4 +17,6 @@ Piece::Piece(wxPanel* parent, wxBitmap image, wxString colourArg, wxString piece
 wxString Piece::getPiece() { return piece; }
 wxString Piece::getColour() { return colour; }
 bool Piece::getIsCapture() { return isCapture; }
+void Piece::setEnPassant(bool enPassantArg) { enPassant = enPassantArg; }
+bool Piece::getEnPassant() { return enPassant; }
 
