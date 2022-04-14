@@ -1,2 +1,11 @@
-1. Finish pawn ruling
-  2. En passant
+1. Knight Movement
+2. Bishop Movement
+3. Rook Movement
+4. Queen Movement
+5. King Movement
+6. Looking for a check
+8. Scoreboard
+  1. Time
+  2. Pieces taken
+9. Win condition
+10. Loading the menu again

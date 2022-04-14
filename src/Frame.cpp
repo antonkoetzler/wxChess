@@ -69,8 +69,8 @@ void Frame::leftDown(wxMouseEvent& evt)
         tiles[tileI - 1][tileO]->addCapture("Open");
         tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
-        // Checking if there is a piece two columns up
-        if (tiles[tileI - 2][tileO]->getPiece() == nullptr)
+        // Checking if there is a piece two columns up (if the pawn is on it's starting column)
+        if (tiles[tileI - 2][tileO]->getPiece() == nullptr && tileI == 6)
         {
           tiles[tileI - 2][tileO]->addCapture("Open");
           tiles[tileI - 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
@@ -86,6 +86,11 @@ void Frame::leftDown(wxMouseEvent& evt)
           tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
         }
         // En passant left
+        if (tiles[tileI][tileO - 1]->getPiece() != nullptr && tiles[tileI][tileO - 1]->getPiece()->getEnPassant())
+        {
+          tiles[tileI - 1][tileO - 1]->addCapture("Open", "Passant");
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
       }
       // Checking right
       if (tileO < 7)
@@ -97,6 +102,11 @@ void Frame::leftDown(wxMouseEvent& evt)
           tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
         }
         // En passant right
+        if (tiles[tileI][tileO + 1]->getPiece() != nullptr && tiles[tileI][tileO + 1]->getPiece()->getEnPassant())
+        {
+          tiles[tileI - 1][tileO + 1]->addCapture("Open", "Passant");
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
       }
     }
     else if (pieceName == "Knight")
@@ -130,8 +140,8 @@ void Frame::leftDown(wxMouseEvent& evt)
         tiles[tileI + 1][tileO]->addCapture("Open");
         tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
-        // Checking if there is a piece two columns down
-        if (tiles[tileI + 2][tileO]->getPiece() == nullptr)
+        // Checking if there is a piece two columns down (if the pawn is on it's starting column)
+        if (tiles[tileI + 2][tileO]->getPiece() == nullptr && tileI == 1)
         {
           tiles[tileI + 2][tileO]->addCapture("Open");
           tiles[tileI + 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
@@ -147,6 +157,11 @@ void Frame::leftDown(wxMouseEvent& evt)
           tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
         }
         // En passant left
+        if (tiles[tileI][tileO - 1]->getPiece() != nullptr && tiles[tileI][tileO - 1]->getPiece()->getEnPassant())
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("Open", "Passant");
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
       }
       // Checking right
       if (tileO < 7)
@@ -158,6 +173,11 @@ void Frame::leftDown(wxMouseEvent& evt)
           tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
         }
         // En passant right
+        if (tiles[tileI][tileO + 1]->getPiece() != nullptr && tiles[tileI][tileO + 1]->getPiece()->getEnPassant())
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("Open", "Passant");
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
       }
     }
     else if (pieceName == "Knight")
@@ -183,9 +203,17 @@ void Frame::leftDown(wxMouseEvent& evt)
   }
   else if (clickedPieceTemp->getIsCapture())
   {
-    // Moving archived clickedPiece to clicked object
-    tiles[tileI][tileO]->addPiece(clickedPiece->getColour(), clickedPiece->getPiece());
+    // Moving archived clickedPiece to clicked object (and checks queen promotion)
+    if (turn == "White" && tileI == 0 && clickedPiece->getPiece() == "Pawn") tiles[tileI][tileO]->addPiece("White", "Queen");
+    else if (turn == "Black" && tileI == 7 && clickedPiece->getPiece() == "Pawn") tiles[tileI][tileO]->addPiece("Black", "Queen");
+    else tiles[tileI][tileO]->addPiece(clickedPiece->getColour(), clickedPiece->getPiece());
     tiles[tileI][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+
+    // Detects enPassant move
+    if (turn == "White" && tiles[tileI + 1][tileO]->getPiece() != nullptr && tiles[tileI + 1][tileO]->getPiece()->getEnPassant())
+      tiles[tileI + 1][tileO]->removePiece();
+    else if (turn == "Black" && tiles[tileI - 1][tileO]->getPiece() != nullptr && tiles[tileI - 1][tileO]->getPiece()->getEnPassant())
+      tiles[tileI - 1][tileO]->removePiece();
 
     // Getting where the piece 'was' and removing it
     int moveI, moveO;
@@ -205,6 +233,21 @@ void Frame::leftDown(wxMouseEvent& evt)
           break;
         }
       }
+    }
+
+    // Clearing all pawns that had Piece::enPassant being true
+    for (int i = 0; i < 8; i++)
+      for (int o = 0; o < 8; o++)
+        if (tiles[i][o]->getPiece() != nullptr && tiles[i][o]->getPiece()->getEnPassant())
+          tiles[i][o]->getPiece()->setEnPassant(false);
+
+    // Checking for a pawn that satisfies Piece::enPassant being true
+    if (moveO == tileO && tiles[tileI][tileO]->getPiece()->getPiece() == "Pawn")
+    {
+      if (tiles[tileI][tileO]->getPiece()->getColour() == "White" && tileI == (moveI - 2))
+        tiles[tileI][tileO]->getPiece()->setEnPassant(true);
+      else if (tiles[tileI][tileO]->getPiece()->getColour() == "Black" && tileI == (moveI + 2))
+        tiles[tileI][tileO]->getPiece()->setEnPassant(true);
     }
   }
 }
@@ -248,8 +291,8 @@ void Frame::initBoard()
   // Adding pieces
   tiles[0][0]->addPiece("Black", "Rook");
   tiles[0][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[0][1]->addPiece("Black", "Knight");
-  tiles[0][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  //tiles[0][1]->addPiece("Black", "Knight");
+  //tiles[0][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[0][2]->addPiece("Black", "Bishop");
   tiles[0][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[0][3]->addPiece("Black", "Queen");
@@ -266,7 +309,7 @@ void Frame::initBoard()
   {
     tiles[1][i]->addPiece("Black", "Pawn");
     tiles[1][i]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  }
+  } tiles[1][1]->removePiece();
   for (int i = 0; i < 8; i++)
   {
     tiles[6][i]->addPiece("White", "Pawn");
@@ -288,25 +331,21 @@ void Frame::initBoard()
   tiles[7][6]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[7][7]->addPiece("White", "Rook");
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-
-  // ***TEST PIECES***
-  tiles[5][0]->addPiece("Black", "Queen");
-  tiles[5][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[4][0]->addPiece("Black", "Pawn");
-  tiles[4][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[5][2]->addPiece("Black", "Pawn");
-  tiles[5][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[2][0]->addPiece("White", "Bishop");
-  tiles[2][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[3][2]->addPiece("White", "Pawn");
-  tiles[3][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 }
 
 void Frame::clearCaptureIcons()
 {
   for (int i = 0; i < 8; i++)
+  {
     for (int o = 0; o < 8; o++)
+    {
       if (tiles[i][o]->getPiece() != nullptr && tiles[i][o]->getPiece()->getIsCapture())
+      {
         tiles[i][o]->resetTile();
+        if (tiles[i][o]->getPiece() != nullptr)
+          tiles[i][o]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+      }
+    }
+  }
 }
 
