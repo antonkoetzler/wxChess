@@ -1,10 +1,10 @@
-2. Bishop Movement
-3. Rook Movement
-4. Queen Movement
-5. King Movement
-6. Looking for a check
-8. Scoreboard
+1. Rook Movement
+2. Queen Movement
+3. King Movement
+4. Castling
+5. Looking for a check
+6. Scoreboard
   1. Time
   2. Pieces taken
-9. Win condition
-10. Loading the menu again
+7. Win condition
+8. Loading the menu again
