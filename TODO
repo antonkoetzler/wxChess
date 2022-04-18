@@ -1,6 +1,6 @@
-1. Castling
 2. Flipping the board on turns
 3. Scoreboard
   1. Time
   2. Pieces taken
 4. Win conditions
+5. Show menu again (Use wxFrame::Destroy)
