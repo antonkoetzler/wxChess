@@ -592,7 +592,118 @@ void Frame::leftDown(wxMouseEvent& evt)
     }
     else if (pieceName == "King")
     {
-      std::cout << "White King" << std::endl;
+      // 1 square up
+      if (tileI > 0)
+      {
+        if (tiles[tileI - 1][tileO]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO]->addCapture("Open");
+          tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI - 1][tileO]->addCapture("Black", tiles[tileI - 1][tileO]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square down
+      if (tileI < 7)
+      {
+        if (tiles[tileI + 1][tileO]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO]->addCapture("Open");
+          tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI + 1][tileO]->addCapture("Black", tiles[tileI + 1][tileO]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square left
+      if (tileO > 0)
+      {
+        if (tiles[tileI][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI][tileO - 1]->addCapture("Open");
+          tiles[tileI][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI][tileO - 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI][tileO - 1]->addCapture("Black", tiles[tileI][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square right
+      if (tileO < 7)
+      {
+        if (tiles[tileI][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI][tileO + 1]->addCapture("Open");
+          tiles[tileI][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI][tileO + 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI][tileO + 1]->addCapture("Black", tiles[tileI][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 up left diagonal
+      if (tileI > 0 && tileO > 0)
+      {
+        if (tiles[tileI - 1][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO - 1]->addCapture("Open");
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO - 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI - 1][tileO - 1]->addCapture("Black", tiles[tileI - 1][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 down left diagonal
+      if (tileI < 7 && tileO > 0)
+      {
+        if (tiles[tileI + 1][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("Open");
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO - 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("Black", tiles[tileI + 1][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 up right diagonal
+      if (tileI > 0 && tileO < 7)
+      {
+        if (tiles[tileI - 1][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO + 1]->addCapture("Open");
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO + 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI - 1][tileO + 1]->addCapture("Black", tiles[tileI - 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 down right diagonal
+      if (tileI < 7 && tileO < 7)
+      {
+        if (tiles[tileI + 1][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("Open");
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO + 1]->getPiece()->getColour() == "Black")
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("Black", tiles[tileI + 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
     }
   }
   else if (turn == "Black" && pieceColour == "Black")
@@ -1129,7 +1240,118 @@ void Frame::leftDown(wxMouseEvent& evt)
     }
     else if (pieceName == "King")
     {
-      std::cout << "Black King" << std::endl;
+      // 1 square up
+      if (tileI < 7)
+      {
+        if (tiles[tileI + 1][tileO]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO]->addCapture("Open");
+          tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI + 1][tileO]->addCapture("White", tiles[tileI + 1][tileO]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square down
+      if (tileI > 0)
+      {
+        if (tiles[tileI - 1][tileO]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO]->addCapture("Open");
+          tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI - 1][tileO]->addCapture("White", tiles[tileI - 1][tileO]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square left
+      if (tileO > 0)
+      {
+        if (tiles[tileI][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI][tileO - 1]->addCapture("Open");
+          tiles[tileI][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI][tileO - 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI][tileO - 1]->addCapture("White", tiles[tileI][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 square right
+      if (tileO < 7)
+      {
+        if (tiles[tileI][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI][tileO + 1]->addCapture("Open");
+          tiles[tileI][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI][tileO + 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI][tileO + 1]->addCapture("White", tiles[tileI][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 up left diagonal
+      if (tileI < 7 && tileO > 0)
+      {
+        if (tiles[tileI + 1][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("Open");
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO - 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI + 1][tileO - 1]->addCapture("White", tiles[tileI + 1][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 down left diagonal
+      if (tileI > 0 && tileO > 0)
+      {
+        if (tiles[tileI - 1][tileO - 1]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO - 1]->addCapture("Open");
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO - 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI - 1][tileO - 1]->addCapture("White", tiles[tileI - 1][tileO - 1]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO - 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 up right diagonal
+      if (tileI < 7 && tileO < 7)
+      {
+        if (tiles[tileI + 1][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("Open");
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI + 1][tileO + 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI + 1][tileO + 1]->addCapture("White", tiles[tileI + 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI + 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
+      // 1 down right diagonal
+      if (tileI > 0 && tileO < 7)
+      {
+        if (tiles[tileI - 1][tileO + 1]->getPiece() == nullptr)
+        {
+          tiles[tileI - 1][tileO + 1]->addCapture("Open");
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+        else if (tiles[tileI - 1][tileO + 1]->getPiece()->getColour() == "White")
+        {
+          tiles[tileI - 1][tileO + 1]->addCapture("White", tiles[tileI - 1][tileO + 1]->getPiece()->getPiece());
+          tiles[tileI - 1][tileO + 1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+        }
+      }
     }
   }
   else if (clickedPieceTemp->getIsCapture())
@@ -1264,9 +1486,9 @@ void Frame::initBoard()
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
   // Test pieces
-  tiles[3][5]->addPiece("White", "Queen");
+  tiles[3][5]->addPiece("White", "King");
   tiles[3][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[4][5]->addPiece("Black", "Queen");
+  tiles[4][5]->addPiece("Black", "King");
   tiles[4][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 }
 

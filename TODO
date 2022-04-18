@@ -1,10 +1,5 @@
-1. Rook Movement
-2. Queen Movement
-3. King Movement
-4. Castling
-5. Looking for a check
-6. Scoreboard
+1. Castling
+2. Scoreboard
   1. Time
   2. Pieces taken
-7. Win condition
-8. Loading the menu again
+3. Win conditions

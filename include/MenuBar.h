@@ -2,8 +2,6 @@
 
 #include <wx/wx.h>
 
-enum { MENU };
-
 class MenuBar : public wxMenuBar
 {
  public:
@@ -11,7 +9,6 @@ class MenuBar : public wxMenuBar
 
  private:
   wxMenu* file;
-    wxMenuItem* fileMenu;
     wxMenuItem* fileQuit;
 };
 
