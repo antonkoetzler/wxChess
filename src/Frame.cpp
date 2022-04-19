@@ -23,12 +23,32 @@ Frame::~Frame() { Destroy(); }
 
 void Frame::quit(wxCommandEvent& evt) { Close(); }
 
-void Frame::launchOneZero(wxCommandEvent& evt) { initGameUi(); }
-void Frame::launchOneOne(wxCommandEvent& evt) { initGameUi(); }
-void Frame::launchFiveFive(wxCommandEvent& evt) { initGameUi(); }
+void Frame::launchOneZero(wxCommandEvent& evt)
+{
+  initGameUi();
+  scoreboard->setScores("1 | 0");
+  mode = "1 | 0";
+}
+void Frame::launchOneOne(wxCommandEvent& evt)
+{
+  initGameUi();
+  scoreboard->setScores("1 | 1");
+  mode = "1 | 1";
+}
+void Frame::launchFiveFive(wxCommandEvent& evt)
+{
+  initGameUi();
+  scoreboard->setScores("5 | 5");
+  mode = "5 | 5";
+}
 
 void Frame::leftDown(wxMouseEvent& evt)
 {
+  // Starting the timing for whoever's turn
+  if (updateTimer != nullptr) { delete updateTimer; updateTimer = nullptr; }
+  if (turn == "White") updateTimer = new UpdateTimer(scoreboard->getPlayerOneTime());
+  else                 updateTimer = new UpdateTimer(scoreboard->getPlayerTwoTime());
+
   // If we have clicked a capture piece
   Piece* clickedPieceTemp = wxDynamicCast(evt.GetEventObject(), Piece);
 
@@ -1445,6 +1465,9 @@ void Frame::leftDown(wxMouseEvent& evt)
       tiles[tileI][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
     }
 
+    // Checking for a king capture, win condition
+    if (tiles[tileI][tileO]->getPiece()->getPiece() == "King") exit(0);
+
     // Castling
     else if (turn == "White" && clickedPieceTemp->getPiece() == "Rook" && clickedPieceTemp->getColour() == "White")
     {
@@ -1519,6 +1542,10 @@ void Frame::leftDown(wxMouseEvent& evt)
       }
     }
 
+    delete updateTimer; updateTimer = nullptr;
+    if (turn == "White") updateTimer = new UpdateTimer(scoreboard->getPlayerOneTime());
+    else                 updateTimer = new UpdateTimer(scoreboard->getPlayerTwoTime());
+
     // Clearing all pawns that had Piece::enPassant being true
     for (int i = 0; i < 8; i++)
       for (int o = 0; o < 8; o++)
@@ -1572,21 +1599,20 @@ void Frame::initBoard()
     }
   }
 
-  // Adding pieces
   tiles[0][0]->addPiece("Black", "Rook");
   tiles[0][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[0][1]->addPiece("Black", "Knight");
-  //tiles[0][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[0][2]->addPiece("Black", "Bishop");
-  //tiles[0][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[0][3]->addPiece("Black", "Queen");
-  //tiles[0][3]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[0][4]->addPiece("Black", "King");
+  tiles[0][1]->addPiece("Black", "Knight");
+  tiles[0][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[0][2]->addPiece("Black", "Bishop");
+  tiles[0][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[0][3]->addPiece("Black", "King");
+  tiles[0][3]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[0][4]->addPiece("Black", "Queen");
   tiles[0][4]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[0][5]->addPiece("Black", "Bishop");
-  //tiles[0][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[0][6]->addPiece("Black", "Knight");
-  //tiles[0][6]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[0][5]->addPiece("Black", "Bishop");
+  tiles[0][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[0][6]->addPiece("Black", "Knight");
+  tiles[0][6]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[0][7]->addPiece("Black", "Rook");
   tiles[0][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   for (int i = 0; i < 8; i++)
@@ -1601,18 +1627,18 @@ void Frame::initBoard()
   }
   tiles[7][0]->addPiece("White", "Rook");
   tiles[7][0]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[7][1]->addPiece("White", "Knight");
-  //tiles[7][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[7][2]->addPiece("White", "Bishop");
-  //tiles[7][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[7][3]->addPiece("White", "Queen");
-  //tiles[7][3]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  tiles[7][4]->addPiece("White", "King");
+  tiles[7][1]->addPiece("White", "Knight");
+  tiles[7][1]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[7][2]->addPiece("White", "Bishop");
+  tiles[7][2]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[7][3]->addPiece("White", "King");
+  tiles[7][3]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[7][4]->addPiece("White", "Queen");
   tiles[7][4]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[7][5]->addPiece("White", "Bishop");
-  //tiles[7][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
-  //tiles[7][6]->addPiece("White", "Knight");
-  //tiles[7][6]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[7][5]->addPiece("White", "Bishop");
+  tiles[7][5]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
+  tiles[7][6]->addPiece("White", "Knight");
+  tiles[7][6]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
   tiles[7][7]->addPiece("White", "Rook");
   tiles[7][7]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 }
