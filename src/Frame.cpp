@@ -89,7 +89,7 @@ void Frame::leftDown(wxMouseEvent& evt)
         tiles[tileI - 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
         // Checking if there is a piece two columns up (if the pawn is on it's starting column)
-        if (tiles[tileI - 2][tileO]->getPiece() == nullptr && tileI == 6)
+        if (tileI == 6 && tiles[tileI - 2][tileO]->getPiece() == nullptr)
         {
           tiles[tileI - 2][tileO]->addCapture("Open");
           tiles[tileI - 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
@@ -776,7 +776,7 @@ void Frame::leftDown(wxMouseEvent& evt)
         tiles[tileI + 1][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
 
         // Checking if there is a piece two columns down (if the pawn is on it's starting column)
-        if (tiles[tileI + 2][tileO]->getPiece() == nullptr && tileI == 1)
+        if (tileI == 1 && tiles[tileI + 2][tileO]->getPiece() == nullptr)
         {
           tiles[tileI + 2][tileO]->addCapture("Open");
           tiles[tileI + 2][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
@@ -1453,20 +1453,22 @@ void Frame::leftDown(wxMouseEvent& evt)
   }
   else if (clickedPieceTemp->getIsCapture())
   {
+    // Checking for a king capture, win condition
+    if (tiles[tileI][tileO]->getPiece()->getPiece() == "King") exit(0);
+
     // Moving archived clickedPiece to clicked object (and checks queen promotion)
     if (turn == "White" && tileI == 0 && clickedPiece->getPiece() == "Pawn")
     {
+      std::cout << "WHITE BRO" << std::endl;
       tiles[tileI][tileO]->addPiece("White", "Queen");
       tiles[tileI][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
     }
     else if (turn == "Black" && tileI == 7 && clickedPiece->getPiece() == "Pawn")
     {
+      std::cout << "BLACK BRO" << std::endl;
       tiles[tileI][tileO]->addPiece("Black", "Queen");
       tiles[tileI][tileO]->getPiece()->Bind(wxEVT_LEFT_DOWN, &Frame::leftDown, this);
     }
-
-    // Checking for a king capture, win condition
-    if (tiles[tileI][tileO]->getPiece()->getPiece() == "King") exit(0);
 
     // Castling
     else if (turn == "White" && clickedPieceTemp->getPiece() == "Rook" && clickedPieceTemp->getColour() == "White")
