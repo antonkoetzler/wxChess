@@ -15,12 +15,8 @@ class Scoreboard : public wxBoxSizer
 
  private:
   wxPanel* playerOne;
-    wxBoxSizer* playerOneSizer;
-      wxStaticText* playerOneTime;
-      wxPanel* playerOnePiecesTaken; // Replace with wxGridSizier
+    wxStaticText* playerOneTime;
   wxPanel* playerTwo;
-    wxBoxSizer* playerTwoSizer;
-      wxStaticText* playerTwoTime;
-      wxPanel* playerTwoPiecesTaken; // Replace with wxGridSizer
+    wxStaticText* playerTwoTime;
 };
 

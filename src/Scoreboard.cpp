@@ -2,8 +2,8 @@
 
 Scoreboard::Scoreboard(wxFrame* parent) : wxBoxSizer(wxHORIZONTAL)
 {
-  playerOne = new wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(305, 60));
-  playerTwo = new wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(305, 60));
+  playerOne = new wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(305, 30));
+  playerTwo = new wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(305, 30));
   playerOne->SetBackgroundColour(wxColour(226, 223, 210));
   playerTwo->SetBackgroundColour(wxColour(226, 223, 210));
 
@@ -25,52 +25,32 @@ void Scoreboard::initPanel(wxString time)
     wxID_ANY,
     time,
     wxDefaultPosition,
-    wxSize(100, 15),
+    wxSize(305, 30),
     wxALIGN_CENTRE_HORIZONTAL
   );
   playerOneTime->SetFont(wxFont(
-    14,
+    20,
     wxFONTFAMILY_DEFAULT,
     wxFONTSTYLE_NORMAL,
     wxFONTWEIGHT_NORMAL
   ));
   playerOneTime->SetForegroundColour(wxColour(0, 0, 0));
 
-  playerOnePiecesTaken = new wxPanel(playerOne, wxID_ANY, wxDefaultPosition, wxSize(205, 60));
-  playerOnePiecesTaken->SetBackgroundColour(wxColour(255, 255, 255));
-
-  playerOneSizer = new wxBoxSizer(wxHORIZONTAL);
-  playerOneSizer->Add(playerOneTime, 0, wxALIGN_CENTRE);
-  playerOneSizer->Add(playerOnePiecesTaken, 0);
-  
-  playerOne->SetSizer(playerOneSizer);
-
-
-
   playerTwoTime = new wxStaticText(
     playerTwo,
     wxID_ANY,
     time,
     wxDefaultPosition,
-    wxSize(100, 15),
+    wxSize(305, 30),
     wxALIGN_CENTRE_HORIZONTAL
   );
   playerTwoTime->SetFont(wxFont(
-    14,
+    20,
     wxFONTFAMILY_DEFAULT,
     wxFONTSTYLE_NORMAL,
     wxFONTWEIGHT_NORMAL
   ));
   playerTwoTime->SetForegroundColour(wxColour(0, 0, 0));
-
-  playerTwoPiecesTaken = new wxPanel(playerTwo, wxID_ANY, wxDefaultPosition, wxSize(205, 60));
-  playerTwoPiecesTaken->SetBackgroundColour(wxColour(255, 255, 255));
-
-  playerTwoSizer = new wxBoxSizer(wxHORIZONTAL);
-  playerTwoSizer->Add(playerTwoTime, 0, wxALIGN_CENTRE);
-  playerTwoSizer->Add(playerTwoPiecesTaken, 0);
-
-  playerTwo->SetSizer(playerTwoSizer);
 }
 
 wxStaticText* Scoreboard::getPlayerOneTime() { return playerOneTime; }
